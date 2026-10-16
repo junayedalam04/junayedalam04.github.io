@@ -1,0 +1,219 @@
+/* =====================================================
+   COLOR TOKENS: edit the shades of gray/black/white here
+   ===================================================== */
+
+/* LIGHT MODE VARIABLE OVERRIDES (default look) */
+:root {
+  --bg-color: #ffffff;        /* page background */
+  --surface-color: #f4f4f4;   /* image frame, hover fills */
+  --text-color: #0a0a0a;      /* main text */
+  --muted-color: #4a4a4a;     /* secondary text */
+  --border-color: #dcdcdc;    /* lines, card and tag outlines */
+  --accent-color: #9a9a9a;    /* silver accent: timeline dots, hover borders */
+  --invert-bg: #0a0a0a;       /* filled buttons */
+  --invert-text: #ffffff;     /* text on filled buttons */
+
+  /* Glass tokens (light): panel fill, edge line, top highlight, shadow, background glow */
+  --glass-bg: rgba(255, 255, 255, .28);
+  --glass-border: rgba(255, 255, 255, .7);
+  --glass-highlight: rgba(255, 255, 255, .95);
+  --glass-shadow: 0 12px 40px rgba(0, 0, 0, .14), 0 0 0 1px rgba(0, 0, 0, .05);
+  --bg-art: url("bg-light.svg");  /* page background for light mode: swap the file, or use any CSS background */
+}
+
+/* DARK MODE VARIABLE OVERRIDES (applied when <html> has class "dark") */
+:root.dark {
+  --bg-color: #050505;
+  --surface-color: #141414;
+  --text-color: #f5f5f5;
+  --muted-color: #a8a8a8;
+  --border-color: #2a2a2a;
+  --accent-color: #bdbdbd;
+  --invert-bg: #f5f5f5;
+  --invert-text: #050505;
+
+  /* Glass tokens (dark) */
+  --glass-bg: rgba(255, 255, 255, .06);
+  --glass-border: rgba(255, 255, 255, .2);
+  --glass-highlight: rgba(255, 255, 255, .28);
+  --glass-shadow: 0 12px 40px rgba(0, 0, 0, .6);
+  --bg-art: url("bg-dark.svg");   /* page background for dark mode */
+}
+
+/* =====================================================
+   GLOBAL TOKENS
+   --radius      : corner roundness of cards and buttons (0 = sharp, 24px = very round)
+   --radius-pill : tags and small buttons
+   --space-section : vertical space between page sections
+   --container   : maximum content width
+   ===================================================== */
+:root {
+  --radius: 14px;
+  --radius-pill: 999px;
+  --space-section: clamp(4.5rem, 10vw, 8rem);
+  --container: 1100px;
+  --glass-blur: 18px;         /* frosting strength: 8px = light, 30px = heavy */
+  --font-display: "Poppins", system-ui, sans-serif;   /* headlines */
+  --font-body: "Poppins", system-ui, sans-serif;      /* body text */
+  --display-weight: 600;      /* headline weight */
+  --display-scale: .66;       /* size of the giant hero word: raise to enlarge, lower to shrink */
+}
+
+/* ===== Base ===== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, ol { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+a { color: inherit; }
+h1, h2 { font-family: var(--font-display); font-weight: var(--display-weight); line-height: 1; letter-spacing: -0.01em; }
+h2 { font-size: clamp(2rem, 4vw, 2.75rem); }
+h3 { font-size: 1.1rem; font-weight: 600; line-height: 1.3; }
+.container { width: min(100% - 3rem, var(--container)); margin-inline: auto; }
+.section { padding-block: var(--space-section) 0; scroll-margin-top: 6rem; }
+:focus-visible { outline: 2px solid var(--text-color); outline-offset: 3px; }
+
+/* Smooth theme change: script.js adds .theme-anim for a moment while toggling */
+html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease !important;
+}
+
+/* ===== Header ===== */
+.site-header {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--bg-color) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; height: 4rem; }
+.logo { font-weight: 600; text-decoration: none; font-size: 1rem; }
+.nav { display: flex; gap: 1.75rem; font-size: .95rem; }
+.nav a { color: var(--muted-color); text-decoration: none; transition: color .2s; }
+.nav a:hover { color: var(--text-color); }
+.header-actions { display: flex; align-items: center; gap: .75rem; }
+.theme-toggle {
+  display: grid; place-items: center; width: 2.4rem; height: 2.4rem;
+  border: 1px solid var(--border-color); border-radius: 50%;
+  background: transparent; color: var(--text-color); cursor: pointer;
+  transition: border-color .2s, transform .3s;
+}
+.theme-toggle:hover { border-color: var(--accent-color); transform: rotate(18deg); }
+.icon-sun { display: none; }
+:root.dark .icon-sun { display: block; }
+:root.dark .icon-moon { display: none; }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-block; padding: .85rem 1.6rem; border-radius: var(--radius-pill);
+  border: 1px solid var(--text-color); font-weight: 500; text-decoration: none;
+  transition: background-color .2s, color .2s, transform .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: var(--invert-bg); color: var(--invert-text); border-color: var(--invert-bg); }
+.btn-ghost { background: transparent; color: var(--text-color); border-color: var(--border-color); }
+.btn-ghost:hover { border-color: var(--text-color); }
+.btn-small { padding: .5rem 1.15rem; font-size: .95rem; }
+
+/* ===== Hero ===== */
+.hero {
+  display: grid; grid-template-columns: 1.4fr 1fr; align-items: center; gap: 4rem;
+  padding-block: clamp(3rem, 8vw, 6rem) 0;
+}
+.hero h1 {
+  font-size: calc(clamp(5rem, 17vw, 12.5rem) * var(--display-scale)); letter-spacing: -0.03em;
+  animation: rise .9s cubic-bezier(.2, .7, .2, 1) both; /* the one entrance moment on the page */
+}
+.lead { max-width: 30rem; margin-top: 1.75rem; font-size: 1.25rem; color: var(--muted-color); }
+.hero-buttons { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2.25rem; }
+.frame {
+  display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
+  background: var(--surface-color); border: 1px solid var(--border-color); border-radius: var(--radius);
+  color: var(--muted-color); font-size: .95rem;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(1.25rem); } to { opacity: 1; transform: none; } }
+
+/* ===== Split sections (About, Skills, Experience) ===== */
+.split { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: start; }
+.prose { display: grid; gap: 1.25rem; max-width: 40rem; font-size: 1.15rem; }
+
+/* ===== Timeline ===== */
+.timeline { position: relative; display: grid; gap: 2.25rem; padding-left: 2rem; border-left: 1px solid var(--border-color); }
+.timeline li { position: relative; }
+.timeline li::before {
+  content: ""; position: absolute; left: calc(-2rem - 5px); top: .55rem;
+  width: 9px; height: 9px; border-radius: 50%; background: var(--accent-color);
+}
+.when { color: var(--muted-color); font-size: .9rem; }
+.timeline p:last-child { color: var(--muted-color); }
+
+/* ===== Footer ===== */
+.site-footer { margin-top: var(--space-section); padding-block: var(--space-section) 2rem; border-top: 1px solid var(--border-color); scroll-margin-top: 0; }
+.site-footer h2 { font-size: clamp(1.4rem, 3vw, 1.75rem); }
+.contact-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; }
+.contact-list { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; font-size: .95rem; }
+.contact-list a { display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; }
+.contact-list a:hover span:last-child { text-decoration: underline; text-underline-offset: 4px; }
+.contact-icon { display: grid; place-items: center; flex: none; width: 2rem; height: 2rem; border: 1px solid var(--glass-border); border-radius: 50%; background: var(--glass-bg); transition: border-color .2s, transform .2s; }
+.contact-list a:hover .contact-icon { border-color: var(--accent-color); transform: translateY(-2px); }
+.copyright { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px solid var(--border-color); color: var(--muted-color); font-size: .85rem; }
+
+/* ===== Responsive ===== */
+@media (max-width: 860px) {
+  .hero, .split { grid-template-columns: 1fr; gap: 2rem; }
+  .frame { max-width: 22rem; }
+  .nav { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero h1 { animation: none; }
+  * { transition: none !important; }
+}
+
+/* =====================================================
+   GLASS EFFECT
+   Look: --glass-* tokens at the top; background: --bg-art. Frosting: --glass-blur.
+   To remove glass from an element, delete its selector from the list below.
+   ===================================================== */
+
+/* Page background: each theme sets its own --bg-art (see the two color blocks at the top) */
+.bg-art { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--bg-art) center / cover no-repeat; }
+
+.site-header, .frame-wrap, .site-footer .container,
+.theme-toggle, .btn-ghost {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), var(--glass-shadow);
+}
+/* Floating glass bar */
+.site-header { top: .75rem; width: min(100% - 1.5rem, var(--container)); margin: .75rem auto 0; border-radius: var(--radius-pill); }
+.site-header .header-inner { width: 100%; height: 3.75rem; padding-inline: 1.5rem; }
+.hero-text { min-width: 0; }
+.frame-wrap { position: relative; margin: 0; padding: .6rem; border-radius: calc(var(--radius) + 8px); }
+.frame-wrap .frame { display: block; border: 0; border-radius: var(--radius); object-position: center 25%; }
+.about-photo { max-width: 17rem; margin-top: 2rem; }
+/* Caption floating on the photo: always light-on-dark so it reads over the image */
+.glass-chip {
+  position: absolute; left: 1.35rem; right: 1.35rem; bottom: 1.35rem; display: grid; gap: .1rem;
+  padding: .85rem 1.1rem; border-radius: calc(var(--radius) - 2px);
+  background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .3); color: #fff;
+  -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.glass-chip span { font-size: .9rem; opacity: .85; }
+.site-footer { border-top: 0; padding-block: 0 2rem; }
+.site-footer .container { padding: clamp(1.1rem, 3vw, 1.6rem) clamp(1.25rem, 3.5vw, 2rem); border-radius: calc(var(--radius) + 10px); }
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass-bg: var(--surface-color); }
+}
